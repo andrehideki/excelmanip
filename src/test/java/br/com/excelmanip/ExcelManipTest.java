@@ -4,11 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import br.com.excelmanip.data.ExcelManipOut;
 import br.com.excelmanip.data.ExcelManipRead;
+import br.com.excelmanip.data.Person;
 
 public class ExcelManipTest {
 
@@ -57,6 +59,18 @@ public class ExcelManipTest {
 				.sheetName("Planilha1")
 				.build());
 		assertEquals(out.getExcelData().getRowSize(), 3);
+	}
+	
+	@Test
+	public void should_read_from_xlsx_convert_exceldata_to_dto() throws Exception {
+		ExcelManipOut out = ExcelManip.read(ExcelManipRead.builder()
+				.excelPath(Paths.get("src", "test", "resources", "persons.xlsx"))
+				.headerLineIndex(0)
+				.dataStartLineIndex(1)
+				.sheetName("Planilha1")
+				.build());
+		List<Person> persons = out.toDTO(Person.class);
+		assertEquals(persons.size(), 3);
 	}
 	
 	@Test
