@@ -35,7 +35,13 @@ public class ExcelManip {
 	}
 	
 	public static void validate(ExcelManipRead input) {
-		if (!Files.exists(input.getExcelPath())) throw new RuntimeException(String.format("File not found", input.getExcelPath().toString()));
+		try {
+			if (!Files.exists(input.getExcelPath())) throw new RuntimeException(String.format("File not found", input.getExcelPath().toString()));
+			Workbook workbook = WorkbookFactory.create(input.getExcelPath().toFile());
+			if (workbook.getSheet(input.getSheetName()) == null) throw new RuntimeException(String.format("Sheet not found", input.getExcelPath().toString()));
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public static Header getHeader(Sheet sheet, int headerLineIndex) {

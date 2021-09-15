@@ -67,4 +67,14 @@ public class ExcelManipTest {
 					.build())
 		);
 	}
+	
+	@Test
+	public void should_throw_error_when_sheet_not_exits() throws Exception {
+		assertThrows(RuntimeException.class, () -> 
+			ExcelManip.read(ExcelManipRead.builder()
+					.excelPath(Paths.get("src", "test", "resources", "persons.xlsx"))
+					.sheetName("NOTFOUND")
+					.build())
+				);
+	}
 }
