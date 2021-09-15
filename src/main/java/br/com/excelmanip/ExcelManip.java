@@ -1,10 +1,12 @@
 package br.com.excelmanip;
 
+import static java.util.stream.StreamSupport.stream;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -14,6 +16,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import br.com.excelmanip.data.ExcelManipOut;
 import br.com.excelmanip.data.ExcelManipOut.Column;
+import br.com.excelmanip.data.ExcelManipOut.ERow;
+import br.com.excelmanip.data.ExcelManipOut.ExcelData;
 import br.com.excelmanip.data.ExcelManipOut.Header;
 import br.com.excelmanip.data.ExcelManipRead;
 
@@ -26,15 +30,18 @@ public class ExcelManip {
 		Sheet sheet = workbook.getSheet(input.getSheetName());
 		return ExcelManipOut.builder()
 					.header(getHeader(sheet, input.getHeaderLineIndex()))
+					.excelData(getExcelData(sheet, input.getDataStartLineIndex()))
 					.build();
+	}
+	
+	public static void validate(ExcelManipRead input) {
+		if (!Files.exists(input.getExcelPath())) throw new RuntimeException(String.format("File not found", input.getExcelPath().toString()));
 	}
 	
 	public static Header getHeader(Sheet sheet, int headerLineIndex) {
 		Row headerRow = sheet.getRow(headerLineIndex);
-		Iterator<Cell> cellIterator = headerRow.cellIterator();
 		List<Column> columns = new ArrayList<>();  
-		while (cellIterator.hasNext()) {
-			Cell cell = cellIterator.next();
+		for (Cell cell: headerRow) {
 			columns.add(Column.builder()
 							.value(cell.toString().trim())
 							.columnIndex(cell.getColumnIndex())
@@ -47,7 +54,26 @@ public class ExcelManip {
 				.build();
 	}
 	
-	public static void validate(ExcelManipRead input) {
-		if (!Files.exists(input.getExcelPath())) throw new RuntimeException(String.format("File not exists", input.getExcelPath().toString()));
+	public static ExcelData getExcelData(Sheet sheet, int dataStartLineIndex) {
+		List<ERow> dataRows = stream(sheet.spliterator(), false).skip(dataStartLineIndex)
+			.map(row -> {
+				List<Column> columns = stream(row.spliterator(), false).map(cell -> {
+					return Column.builder()
+								.value(cell.toString().trim())
+								.columnIndex(cell.getColumnIndex())
+								.rowIndex(cell.getRowIndex())
+								.build();
+				})
+				.collect(Collectors.toList());
+				return ERow.builder()
+							.rowIndex(row.getRowNum())
+							.columns(columns)
+							.build();
+			})
+			.collect(Collectors.toList());
+		return ExcelData.builder()
+				.rows(dataRows)
+				.rowSize(dataRows.size())
+				.build();
 	}
 }

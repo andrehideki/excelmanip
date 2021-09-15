@@ -9,6 +9,7 @@ import lombok.Data;
 @Builder
 public class ExcelManipOut {
 	private Header header;
+	private ExcelData excelData;
 	
 	@Data
 	@Builder
@@ -25,11 +26,23 @@ public class ExcelManipOut {
 	
 	@Data
 	@Builder
+	public static class ExcelData {
+		private List<ERow> rows;
+		private int rowSize;
+	}
+	
+	@Data
+	@Builder
 	public static class Column {
 		private String value;
 		private int rowIndex;
 		private int columnIndex;
 	}
 	
-	
+	@Data
+	@Builder
+	public static class ERow {
+		private int rowIndex;
+		private List<Column> columns;
+	}
 }

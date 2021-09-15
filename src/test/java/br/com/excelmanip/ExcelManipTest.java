@@ -49,6 +49,17 @@ public class ExcelManipTest {
 	}
 	
 	@Test
+	public void should_read_from_xlsx_columns_data() throws Exception {
+		ExcelManipOut out = ExcelManip.read(ExcelManipRead.builder()
+				.excelPath(Paths.get("src", "test", "resources", "persons.xlsx"))
+				.headerLineIndex(0)
+				.dataStartLineIndex(1)
+				.sheetName("Planilha1")
+				.build());
+		assertEquals(out.getExcelData().getRowSize(), 3);
+	}
+	
+	@Test
 	public void should_throw_error_when_file_not_exits() throws Exception {
 		assertThrows(RuntimeException.class, () -> 
 			ExcelManip.read(ExcelManipRead.builder()
