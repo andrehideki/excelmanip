@@ -47,7 +47,7 @@ public class ExcelManipTest {
 				.build());
 		assertEquals(out.getHeader().getColumn("Nome").getColumnIndex(), 0);
 		assertEquals(out.getHeader().getColumn("Nascimento").getColumnIndex(), 4);
-		assertEquals(out.getHeader().getSize(), 5);
+		assertEquals(out.getHeader().getSize(), 6);
 	}
 	
 	@Test
@@ -71,6 +71,7 @@ public class ExcelManipTest {
 				.build());
 		List<Person> persons = out.toDTO(Person.class);
 		assertEquals(persons.size(), 3);
+		System.out.println(persons);
 	}
 	
 	@Test

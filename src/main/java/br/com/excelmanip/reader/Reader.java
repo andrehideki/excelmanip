@@ -26,16 +26,19 @@ public class Reader {
 		Path excelPath = input.getExcelPath();
 		Workbook workbook = WorkbookFactory.create(excelPath.toFile());
 		Sheet sheet = workbook.getSheet(input.getSheetName());
-		return ExcelManipOut.builder()
+		ExcelManipOut excelManipOut = ExcelManipOut.builder()
 					.header(getHeader(sheet, input.getHeaderLineIndex()))
 					.excelData(getExcelData(sheet, input.getDataStartLineIndex()))
 					.build();
+		workbook.close();
+		return excelManipOut;
 	}
 	
 	public static void validate(ExcelManipRead input) {
 		try {
 			if (!Files.exists(input.getExcelPath())) throw new RuntimeException(String.format("File not found", input.getExcelPath().toString()));
 			Workbook workbook = WorkbookFactory.create(input.getExcelPath().toFile());
+			workbook.close();
 			if (workbook.getSheet(input.getSheetName()) == null) throw new RuntimeException(String.format("Sheet not found", input.getExcelPath().toString()));
 		} catch (Exception e) {
 			throw new RuntimeException(e);

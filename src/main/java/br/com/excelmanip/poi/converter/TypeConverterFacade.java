@@ -1,7 +1,9 @@
 package br.com.excelmanip.poi.converter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import br.com.excelmanip.poi.converter.types.BigDecimalTypeConverter;
 import br.com.excelmanip.poi.converter.types.IntTypeConverter;
 import br.com.excelmanip.poi.converter.types.LocalDateTypeConverter;
 
@@ -14,6 +16,8 @@ public class TypeConverterFacade {
 			return new IntTypeConverter(value).convert();
 		} else if (clazz.equals(LocalDate.class)) {
 			return new LocalDateTypeConverter(value).convert();
+		} else if (clazz.equals(BigDecimal.class)) {
+			return new BigDecimalTypeConverter(value).convert();
 		}
 		throw new RuntimeException("Not supported type: " + clazz);
 	}
