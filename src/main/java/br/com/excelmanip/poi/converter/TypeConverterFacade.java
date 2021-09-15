@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import br.com.excelmanip.poi.converter.types.IntTypeConverter;
 import br.com.excelmanip.poi.converter.types.LocalDateTypeConverter;
 
-public class TypeConverterFactory {
+public class TypeConverterFacade {
 	
 	public static Object convert(String value, Class<?> clazz) {
 		if (clazz.equals(String.class)) {

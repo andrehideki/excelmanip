@@ -1,4 +1,4 @@
-package br.com.excelmanip.data;
+package br.com.excelmanip.reader;
 
 import java.nio.file.Path;
 

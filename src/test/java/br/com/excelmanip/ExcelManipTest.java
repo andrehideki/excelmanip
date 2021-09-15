@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import br.com.excelmanip.data.ExcelManipOut;
-import br.com.excelmanip.data.ExcelManipRead;
 import br.com.excelmanip.data.Person;
+import br.com.excelmanip.reader.ExcelManipOut;
+import br.com.excelmanip.reader.ExcelManipRead;
 
 public class ExcelManipTest {
 

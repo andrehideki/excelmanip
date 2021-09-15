@@ -1,10 +1,10 @@
-package br.com.excelmanip.data;
+package br.com.excelmanip.reader;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.excelmanip.poi.converter.TypeConverterFactory;
+import br.com.excelmanip.poi.converter.TypeConverterFacade;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,7 +22,7 @@ public class ExcelManipOut {
 				for (Field field: dtoClass.getDeclaredFields()) {
 					String columnValue = row.getValue(header.getColumn(field.getName()).getColumnIndex());
 					field.setAccessible(true);
-					Object fieldValue = TypeConverterFactory.convert(columnValue, field.getType());
+					Object fieldValue = TypeConverterFacade.convert(columnValue, field.getType());
 					field.set(dtoInstance, fieldValue);
 					field.setAccessible(false);
 				}
