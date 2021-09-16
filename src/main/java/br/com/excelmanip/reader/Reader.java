@@ -26,9 +26,10 @@ public class Reader {
 		Path excelPath = input.getExcelPath();
 		Workbook workbook = WorkbookFactory.create(excelPath.toFile());
 		Sheet sheet = workbook.getSheet(input.getSheetName());
+		Header header = getHeader(sheet, input.getHeaderLineIndex());
 		ExcelManipOut excelManipOut = ExcelManipOut.builder()
-					.header(getHeader(sheet, input.getHeaderLineIndex()))
-					.excelData(getExcelData(sheet, input.getDataStartLineIndex()))
+					.header(header)
+					.excelData(getExcelData(sheet, header, input.getDataStartLineIndex()))
 					.build();
 		workbook.close();
 		return excelManipOut;
@@ -49,6 +50,8 @@ public class Reader {
 		Row headerRow = sheet.getRow(headerLineIndex);
 		List<Column> columns = new ArrayList<>();  
 		for (Cell cell: headerRow) {
+			if (cell.toString().trim().isEmpty())
+				break;
 			columns.add(Column.builder()
 							.value(cell.toString().trim())
 							.columnIndex(cell.getColumnIndex())
@@ -57,12 +60,13 @@ public class Reader {
 		}
 		return Header.builder()
 				.columns(columns)
-				.size(headerRow.getPhysicalNumberOfCells())
+				.size(columns.size())
 				.build();
 	}
 	
-	public static ExcelData getExcelData(Sheet sheet, int dataStartLineIndex) {
-		List<ERow> dataRows = stream(sheet.spliterator(), false).skip(dataStartLineIndex)
+	public static ExcelData getExcelData(Sheet sheet, Header header, int dataStartLineIndex) {
+		List<ERow> dataRows = stream(sheet.spliterator(), false)
+			.skip(dataStartLineIndex)
 			.map(row -> {
 				List<Column> columns = stream(row.spliterator(), false).map(cell -> {
 					return Column.builder()
@@ -77,6 +81,7 @@ public class Reader {
 							.columns(columns)
 							.build();
 			})
+			.filter(erow -> erow.getColumns().stream().anyMatch(c -> !c.getValue().isEmpty()))
 			.collect(Collectors.toList());
 		return ExcelData.builder()
 				.rows(dataRows)

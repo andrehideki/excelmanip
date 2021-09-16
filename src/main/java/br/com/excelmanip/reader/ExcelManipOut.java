@@ -77,7 +77,7 @@ public class ExcelManipOut {
 			return columns.stream().filter(c -> c.getColumnIndex() == column)
 					.map(c -> c.getValue())
 					.findFirst()
-					.orElseThrow(() -> new RuntimeException("Column not found"));
+					.orElse("");
 		}
 	}
 	
