@@ -42,9 +42,9 @@ public class ExcelManipOut {
 		private int size;
 		
 		public Column getColumn(String headerName) {
-			return columns.stream().filter(c -> c.value.equals(headerName))
-						.findFirst()
-						.orElseThrow(() -> new RuntimeException("Column not found"));
+			return columns.stream().filter(c -> c.value.equals(headerName) || c.getOnlyText().toUpperCase().equals(headerName.toUpperCase()))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Column not found: " + headerName));
 		}
 	}
 	
@@ -61,6 +61,10 @@ public class ExcelManipOut {
 		private String value;
 		private int rowIndex;
 		private int columnIndex;
+		
+		public String getOnlyText() {
+			return value.replaceAll("\\W+|[_]", "");
+		}
 	}
 	
 	@Data
@@ -76,4 +80,5 @@ public class ExcelManipOut {
 					.orElseThrow(() -> new RuntimeException("Column not found"));
 		}
 	}
+	
 }

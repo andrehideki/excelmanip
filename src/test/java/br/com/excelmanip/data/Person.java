@@ -13,4 +13,5 @@ public class Person {
 	private int Idade;
 	private LocalDate Nascimento;
 	private BigDecimal Salary;
+	private String flagLetra;
 }
