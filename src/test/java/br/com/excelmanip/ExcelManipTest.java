@@ -58,7 +58,8 @@ public class ExcelManipTest {
 				.build());
 		List<Person> persons = out.toDTO(Person.class);
 		assertEquals(persons.size(), 3);
-		assertEquals(persons.get(0).getFlagLetra(), "a");
+		assertEquals("a", persons.get(0).getFlagLetra());
+		assertEquals("24", persons.get(0).getIdade());
 	}
 	
 	@Test

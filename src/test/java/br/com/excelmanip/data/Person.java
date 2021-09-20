@@ -11,7 +11,7 @@ public class Person {
 	private String Nome;
 	private String Endereço;
 	private String Cep;
-	@ExcelColumn(nonChars = false)
+	@ExcelColumn(removeNonChars = true)
 	private String Idade;
 	private LocalDate Nascimento;
 	private BigDecimal Salary;

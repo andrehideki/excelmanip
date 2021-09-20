@@ -6,7 +6,7 @@ import java.util.List;
 
 import br.com.excelmanip.poi.converter.TypeConverterFacade;
 import br.com.excelmanip.reader.column.ExcelColumn;
-import br.com.excelmanip.reader.column.ExcelColumnProcessor;
+import br.com.excelmanip.reader.column.processors.ExcelColumnProcessor;
 import lombok.Builder;
 import lombok.Data;
 
