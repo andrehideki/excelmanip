@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.excelmanip.poi.converter.TypeConverterFacade;
+import br.com.excelmanip.reader.column.ExcelColumn;
+import br.com.excelmanip.reader.column.ExcelColumnProcessor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,6 +24,9 @@ public class ExcelManipOut {
 				for (Field field: dtoClass.getDeclaredFields()) {
 					String columnValue = row.getValue(header.getColumn(field.getName()).getColumnIndex());
 					field.setAccessible(true);
+					if (field.isAnnotationPresent(ExcelColumn.class)) {
+						columnValue = new ExcelColumnProcessor().process(columnValue, field.getAnnotation(ExcelColumn.class));
+					}
 					Object fieldValue = TypeConverterFacade.convert(columnValue, field.getType());
 					field.set(dtoInstance, fieldValue);
 					field.setAccessible(false);

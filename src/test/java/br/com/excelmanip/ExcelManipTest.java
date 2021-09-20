@@ -13,19 +13,6 @@ import br.com.excelmanip.reader.ExcelManipOut;
 import br.com.excelmanip.reader.ExcelManipRead;
 
 public class ExcelManipTest {
-
-	/* Input:
-		 * Path
-		 * Sheet name
-		 * Header index
-		 * Data start index
-	 * Output:
-	 	* Success 	
-		 	* Header
-		 	* Campos
-	 	* Failure
-	 		* Error message  	
-	 * */
 	
 	@Test
 	public void should_read_a_xlsx() throws Exception {
