@@ -11,7 +11,7 @@ public class Person {
 	private String Nome;
 	private String Endereço;
 	private String Cep;
-	@ExcelColumn(removeNonChars = true)
+	@ExcelColumn(deleteFromRight = "\\.")
 	private String Idade;
 	private LocalDate Nascimento;
 	private BigDecimal Salary;
