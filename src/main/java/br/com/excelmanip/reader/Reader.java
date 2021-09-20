@@ -6,9 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -65,12 +67,13 @@ public class Reader {
 	}
 	
 	public static ExcelData getExcelData(Sheet sheet, Header header, int dataStartLineIndex) {
+		DataFormatter dataFormatter = new DataFormatter(Locale.US);
 		List<ERow> dataRows = stream(sheet.spliterator(), false)
 			.skip(dataStartLineIndex)
 			.map(row -> {
 				List<Column> columns = stream(row.spliterator(), false).map(cell -> {
 					return Column.builder()
-								.value(cell.toString().trim())
+								.value(dataFormatter.formatCellValue(cell))
 								.columnIndex(cell.getColumnIndex())
 								.rowIndex(cell.getRowIndex())
 								.build();
